@@ -19,6 +19,8 @@ namespace LinqExercises.Extensions
             services.AddTransient<ILinqExerciseService, LinqExerciseService>();
             // Register ProjectionService
             services.AddTransient<Features.Projection.IProjectionService, Features.Projection.ProjectionService>();
+            // Register FilterService
+            services.AddTransient<Features.Filtering.IFilterService, Features.Filtering.FilterService>();   
 
             return services;
         }
