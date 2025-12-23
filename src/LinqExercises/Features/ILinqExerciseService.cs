@@ -13,11 +13,14 @@ namespace LinqExercises.Features
         private readonly ILogger<LinqExerciseService> _logger;
         private readonly Features.Projection.IProjectionService _projectionService;
         private readonly Features.Filtering.IFilterService _filterService;
-        public LinqExerciseService( ILogger<LinqExerciseService> logger, Features.Projection.IProjectionService projectionService, Features.Filtering.IFilterService filterService )
+        private readonly Features.Sorting.ISortService _sortService;
+        public LinqExerciseService( ILogger<LinqExerciseService> logger, Features.Projection.IProjectionService projectionService, 
+            Features.Filtering.IFilterService filterService, Features.Sorting.ISortService sortService )
         {
             _logger = logger;
             _projectionService = projectionService;
             _filterService = filterService;
+            _sortService = sortService;
         }
         public async Task RunAllExercises()
         {
@@ -41,7 +44,8 @@ namespace LinqExercises.Features
                 optiontable.AddRow("11", "Conversion Exercises");
                 optiontable.AddRow("12", "Generation Exercises");
                 optiontable.AddRow("13", "Miscellaneous Exercises");
-                optiontable.AddRow("14", "Exit");
+                optiontable.AddRow("14", "Sorting Exercises");
+                optiontable.AddRow("0", "Exit");
                 AnsiConsole.Write(optiontable);
                 choice = AnsiConsole.Ask<int>("Please select the exercise number to run?");
                 switch (choice)
@@ -52,13 +56,14 @@ namespace LinqExercises.Features
                     case 2:
                         await _filterService.RunFilteringExerciseAsync();
                         break;
-                    // Additional cases for other exercise types would go here
                     case 14:
+                        await _sortService.RunSortingExerciseAsync();
+                        break;
                     default:
                         _logger.LogInformation("Exiting LINQ Exercises.");
                         break;
                 }
-            }while(choice<14);
+            }while(choice<15);
             
             _logger.LogInformation("[LinqExerciseService.RunAllExercises] - Completed all LINQ exercises.");
         }
