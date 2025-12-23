@@ -5,6 +5,8 @@ namespace LinqExercises.Extensions
     using LinqExercises.Shared.Data;
     using Microsoft.EntityFrameworkCore;
     using LinqExercises.Features;
+    using Microsoft.Extensions.DependencyInjection.Extensions;
+    using LinqExercises.Features.Sorting;
 
     public static class ServiceCollectionExtension
     {
@@ -20,7 +22,9 @@ namespace LinqExercises.Extensions
             // Register ProjectionService
             services.AddTransient<Features.Projection.IProjectionService, Features.Projection.ProjectionService>();
             // Register FilterService
-            services.AddTransient<Features.Filtering.IFilterService, Features.Filtering.FilterService>();   
+            services.AddTransient<Features.Filtering.IFilterService, Features.Filtering.FilterService>();  
+            // Register SortService 
+            services.TryAddTransient<ISortService, SortService>();
 
             return services;
         }
