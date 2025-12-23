@@ -23,6 +23,8 @@ namespace LinqExercises.Extensions
             services.AddTransient<Features.Projection.IProjectionService, Features.Projection.ProjectionService>();
             // Register FilterService
             services.AddTransient<Features.Filtering.IFilterService, Features.Filtering.FilterService>();  
+            // Register JoinService
+            services.AddTransient<Features.Joining.IJoinService, Features.Joining.JoinService>();
             // Register SortService 
             services.TryAddTransient<ISortService, SortService>();
 
