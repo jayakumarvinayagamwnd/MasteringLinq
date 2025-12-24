@@ -25,6 +25,8 @@ namespace LinqExercises.Extensions
             services.AddTransient<Features.Filtering.IFilterService, Features.Filtering.FilterService>();  
             // Register JoinService
             services.AddTransient<Features.Joining.IJoinService, Features.Joining.JoinService>();
+            // Register QuantifierService
+            services.AddTransient<Features.Quantifier.IQuantifierService, Features.Quantifier.QuantifierService>();
             // Register SortService 
             services.TryAddTransient<ISortService, SortService>();
 
