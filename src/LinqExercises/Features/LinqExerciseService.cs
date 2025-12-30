@@ -13,14 +13,16 @@ namespace LinqExercises.Features
         private readonly Features.Quantifier.IQuantifierService _quantifierService;
         private readonly Features.Aggregation.IAggregationService _aggregationService;
         private readonly Features.ElementOperator.IElementOperator _elementOperatorService;
-        public LinqExerciseService( ILogger<LinqExerciseService> logger, 
-            Features.Projection.IProjectionService projectionService, 
-            Features.Filtering.IFilterService filterService, 
-            Features.Sorting.ISortService sortService, 
+        private readonly Features.SetOperation.ISetOperationService _setOperationService;
+        public LinqExerciseService(ILogger<LinqExerciseService> logger,
+            Features.Projection.IProjectionService projectionService,
+            Features.Filtering.IFilterService filterService,
+            Features.Sorting.ISortService sortService,
             Features.Joining.IJoinService joinService,
-            Features.Quantifier.IQuantifierService quantifierService, 
+            Features.Quantifier.IQuantifierService quantifierService,
             Features.Aggregation.IAggregationService aggregationService,
-            Features.ElementOperator.IElementOperator elementOperatorService)
+            Features.ElementOperator.IElementOperator elementOperatorService,
+            Features.SetOperation.ISetOperationService setOperationService)
         {
             _logger = logger;
             _projectionService = projectionService;
@@ -30,6 +32,7 @@ namespace LinqExercises.Features
             _quantifierService = quantifierService;
             _aggregationService = aggregationService;
             _elementOperatorService = elementOperatorService;
+            _setOperationService = setOperationService;
         }
         public async Task RunAllExercises()
         {
@@ -70,6 +73,9 @@ namespace LinqExercises.Features
                         break;
                     case 5:
                         await _aggregationService.RunAggregationExerciseAsync();
+                        break;
+                    case 6:
+                        await _setOperationService.RunSetOperationExerciseAsync();
                         break;
                     case 8:
                         await _quantifierService.RunQuantifierExerciseAsync();

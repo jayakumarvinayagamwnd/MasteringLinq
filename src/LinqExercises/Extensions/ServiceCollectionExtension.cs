@@ -33,7 +33,8 @@ namespace LinqExercises.Extensions
             services.AddTransient<Features.Aggregation.IAggregationService, Features.Aggregation.AggregationService>();
             // Register ElementOperatorService
             services.AddTransient<Features.ElementOperator.IElementOperator, Features.ElementOperator.ElementOperatorService>();
-
+            // Register SetOperationService
+            services.AddTransient<Features.SetOperation.ISetOperationService, Features.SetOperation.SetOperationService>();
             return services;
         }
     }
