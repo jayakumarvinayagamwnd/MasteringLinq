@@ -11,9 +11,14 @@ namespace LinqExercises.Features
         private readonly Features.Sorting.ISortService _sortService;
         private readonly Features.Joining.IJoinService _joinService;
         private readonly Features.Quantifier.IQuantifierService _quantifierService;
-        public LinqExerciseService( ILogger<LinqExerciseService> logger, Features.Projection.IProjectionService projectionService, 
-            Features.Filtering.IFilterService filterService, Features.Sorting.ISortService sortService, Features.Joining.IJoinService joinService,
-            Features.Quantifier.IQuantifierService quantifierService)
+        private readonly Features.Aggregation.IAggregationService _aggregationService;
+        public LinqExerciseService( ILogger<LinqExerciseService> logger, 
+            Features.Projection.IProjectionService projectionService, 
+            Features.Filtering.IFilterService filterService, 
+            Features.Sorting.ISortService sortService, 
+            Features.Joining.IJoinService joinService,
+            Features.Quantifier.IQuantifierService quantifierService, 
+            Features.Aggregation.IAggregationService aggregationService)
         {
             _logger = logger;
             _projectionService = projectionService;
@@ -21,6 +26,7 @@ namespace LinqExercises.Features
             _sortService = sortService;
             _joinService = joinService;
             _quantifierService = quantifierService;
+            _aggregationService = aggregationService;
         }
         public async Task RunAllExercises()
         {
@@ -58,6 +64,9 @@ namespace LinqExercises.Features
                         break;
                     case 3:
                         await _joinService.RunJoiningExerciseAsync();
+                        break;
+                    case 5:
+                        await _aggregationService.RunAggregationExerciseAsync();
                         break;
                     case 8:
                         await _quantifierService.RunQuantifierExerciseAsync();

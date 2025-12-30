@@ -29,6 +29,8 @@ namespace LinqExercises.Extensions
             services.AddTransient<Features.Quantifier.IQuantifierService, Features.Quantifier.QuantifierService>();
             // Register SortService 
             services.TryAddTransient<ISortService, SortService>();
+            // Register AggregationService
+            services.AddTransient<Features.Aggregation.IAggregationService, Features.Aggregation.AggregationService>();
 
             return services;
         }
