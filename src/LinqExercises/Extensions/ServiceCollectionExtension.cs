@@ -31,6 +31,8 @@ namespace LinqExercises.Extensions
             services.TryAddTransient<ISortService, SortService>();
             // Register AggregationService
             services.AddTransient<Features.Aggregation.IAggregationService, Features.Aggregation.AggregationService>();
+            // Register ElementOperatorService
+            services.AddTransient<Features.ElementOperator.IElementOperator, Features.ElementOperator.ElementOperatorService>();
 
             return services;
         }

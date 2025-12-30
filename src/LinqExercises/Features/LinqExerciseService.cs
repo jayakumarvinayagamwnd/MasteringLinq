@@ -12,13 +12,15 @@ namespace LinqExercises.Features
         private readonly Features.Joining.IJoinService _joinService;
         private readonly Features.Quantifier.IQuantifierService _quantifierService;
         private readonly Features.Aggregation.IAggregationService _aggregationService;
+        private readonly Features.ElementOperator.IElementOperator _elementOperatorService;
         public LinqExerciseService( ILogger<LinqExerciseService> logger, 
             Features.Projection.IProjectionService projectionService, 
             Features.Filtering.IFilterService filterService, 
             Features.Sorting.ISortService sortService, 
             Features.Joining.IJoinService joinService,
             Features.Quantifier.IQuantifierService quantifierService, 
-            Features.Aggregation.IAggregationService aggregationService)
+            Features.Aggregation.IAggregationService aggregationService,
+            Features.ElementOperator.IElementOperator elementOperatorService)
         {
             _logger = logger;
             _projectionService = projectionService;
@@ -27,6 +29,7 @@ namespace LinqExercises.Features
             _joinService = joinService;
             _quantifierService = quantifierService;
             _aggregationService = aggregationService;
+            _elementOperatorService = elementOperatorService;
         }
         public async Task RunAllExercises()
         {
@@ -51,7 +54,7 @@ namespace LinqExercises.Features
                 optiontable.AddRow("12", "Generation Exercises");
                 optiontable.AddRow("13", "Miscellaneous Exercises");
                 optiontable.AddRow("14", "Sorting Exercises");
-                optiontable.AddRow("0", "Exit");
+                optiontable.AddRow("15", "Exit");
                 AnsiConsole.Write(optiontable);
                 choice = AnsiConsole.Ask<int>("Please select the exercise number to run?");
                 switch (choice)
@@ -70,6 +73,9 @@ namespace LinqExercises.Features
                         break;
                     case 8:
                         await _quantifierService.RunQuantifierExerciseAsync();
+                        break;
+                    case 10:
+                        await _elementOperatorService.RunElementOperatorExerciseAsync();
                         break;
                     case 14:
                         await _sortService.RunSortingExerciseAsync();
