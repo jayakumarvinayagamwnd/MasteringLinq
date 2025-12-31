@@ -19,58 +19,51 @@ namespace LinqExercises.Features.SetOperation
         public async Task RunSetOperationExerciseAsync()
         {
             _logger.LogInformation("[SetOperationService.RunSetOperationExerciseAsync] - Running Set Operation Exercise...");
-            // Distinct, Except, Intersect, Union Example
-            var trackNames = await _chinookDbContext.Tracks
-                .Select(t => t.Name)
+            // Distinct
+            var customerNames = await _chinookDbContext.Customers
+                .Select(c => c.FirstName)
                 .Distinct()
                 .ToListAsync();
-            var albumTitle = await _chinookDbContext.Albums
-                .DistinctBy(x=> x.Title)
-                .ToListAsync();
-            // Except
-            var trackNamesInPlaylist = await _chinookDbContext.PlaylistTracks
-                .Select(pt => pt.Track!.Name)
-                .Distinct()
-                .ToListAsync();
-            var trackNamesNotInPlaylist = trackNames.Except(trackNamesInPlaylist).ToList();
-            // Intersect
-            var trackNamesInBoth = trackNames.Intersect(trackNamesInPlaylist).ToList();
-            // Union
-            var allTrackNames = trackNames.Union(trackNamesInPlaylist).ToList();
-            var distinctTable = new Table().Title("Distinct Track Names");
-            distinctTable.AddColumn("Track Name");
-            foreach (var name in trackNames)
-            {
-                distinctTable.AddRow(name);
-            }
+            var distinctTable = new Table().Title("Distinct Customer First Names");
+            distinctTable.AddColumn("First Name");
+            customerNames.ForEach(name => distinctTable.AddRow(Markup.Escape(name!)));
             AnsiConsole.Write(distinctTable);
-            AnsiConsole.MarkupLine("[yellow]Press any key to continue...[/]");
+            AnsiConsole.MarkupLine($"[bold yellow]Results: {customerNames.Count}[/]");
+            AnsiConsole.MarkupLine("[yellow]Press any key to continue to the next Set Operation example...[/]");
             Console.ReadKey();
-            var exceptTable = new Table().Title("Track Names Not In Playlist");
-            exceptTable.AddColumn("Track Name");
-            foreach (var name in trackNamesNotInPlaylist)
-            {
-                exceptTable.AddRow(name);
-            }
+            // Except Example
+            var trackIdsInPlaylist1 = await _chinookDbContext.PlaylistTracks
+                .Where(pt => pt.PlaylistId == 1)
+                .Select(pt => pt.TrackId)
+                .ToListAsync();
+            var trackIdsInPlaylist2 = await _chinookDbContext.PlaylistTracks
+                .Where(pt => pt.PlaylistId == 2)
+                .Select(pt => pt.TrackId)
+                .ToListAsync();
+            var exceptTrackIds = trackIdsInPlaylist1.Except(trackIdsInPlaylist2).ToList();
+            var exceptTable = new Table().Title("Tracks in Playlist 1 but not in Playlist 2");
+            exceptTable.AddColumn("Track ID");
+            exceptTrackIds.ForEach(id => exceptTable.AddRow(Markup.Escape(id.ToString())));
             AnsiConsole.Write(exceptTable);
-            AnsiConsole.MarkupLine("[yellow]Press any key to continue...[/]");
+            AnsiConsole.MarkupLine($"[bold yellow]Results: {exceptTrackIds.Count}[/]");
+            AnsiConsole.MarkupLine("[yellow]Press any key to continue to the next Set Operation example...[/]");
             Console.ReadKey();
-            var intersectTable = new Table().Title("Track Names In Both");
-            intersectTable.AddColumn("Track Name");
-            foreach (var name in trackNamesInBoth)
-            {
-                intersectTable.AddRow(name);
-            }
+            // Intersect Example
+            var intersectTrackIds = trackIdsInPlaylist1.Intersect(trackIdsInPlaylist2).ToList();
+            var intersectTable = new Table().Title("Tracks in both Playlist 1 and Playlist 2");
+            intersectTable.AddColumn("Track ID");
+            intersectTrackIds.ForEach(id => intersectTable.AddRow(Markup.Escape(id.ToString())));
             AnsiConsole.Write(intersectTable);
-            AnsiConsole.MarkupLine("[yellow]Press any key to continue...[/]");
+            AnsiConsole.MarkupLine($"[bold yellow]Results: {intersectTrackIds.Count}[/]");
+            AnsiConsole.MarkupLine("[yellow]Press any key to continue to the next Set Operation example...[/]");
             Console.ReadKey();
-            var unionTable = new Table().Title("All Track Names (Union)");
-            unionTable.AddColumn("Track Name");
-            foreach (var name in allTrackNames)
-            {
-                unionTable.AddRow(name);
-            }
+            // Union Example
+            var unionTrackIds = trackIdsInPlaylist1.Union(trackIdsInPlaylist2).ToList();
+            var unionTable = new Table().Title("All Unique Tracks in Playlist 1 and Playlist 2");
+            unionTable.AddColumn("Track ID");
+            unionTrackIds.ForEach(id => unionTable.AddRow(Markup.Escape(id.ToString())));
             AnsiConsole.Write(unionTable);
+            AnsiConsole.MarkupLine($"[bold yellow]Results: {unionTrackIds.Count}[/]");
             AnsiConsole.MarkupLine("[yellow]Press any key to finish the Set Operation Exercise...[/]");
             Console.ReadKey();
             _logger.LogInformation("[SetOperationService.RunSetOperationExerciseAsync] - Set Operation Exercise Completed.");
