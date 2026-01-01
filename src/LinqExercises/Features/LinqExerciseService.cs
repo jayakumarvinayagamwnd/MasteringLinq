@@ -1,3 +1,4 @@
+using System;
 using Microsoft.Extensions.Logging;
 using Spectre.Console;
 
@@ -14,6 +15,7 @@ namespace LinqExercises.Features
         private readonly Features.Aggregation.IAggregationService _aggregationService;
         private readonly Features.ElementOperator.IElementOperator _elementOperatorService;
         private readonly Features.SetOperation.ISetOperationService _setOperationService;
+        private readonly Features.Grouping.IGroupService _groupService;
         public LinqExerciseService(ILogger<LinqExerciseService> logger,
             Features.Projection.IProjectionService projectionService,
             Features.Filtering.IFilterService filterService,
@@ -22,7 +24,8 @@ namespace LinqExercises.Features
             Features.Quantifier.IQuantifierService quantifierService,
             Features.Aggregation.IAggregationService aggregationService,
             Features.ElementOperator.IElementOperator elementOperatorService,
-            Features.SetOperation.ISetOperationService setOperationService)
+            Features.SetOperation.ISetOperationService setOperationService,
+            Features.Grouping.IGroupService groupService)
         {
             _logger = logger;
             _projectionService = projectionService;
@@ -33,12 +36,16 @@ namespace LinqExercises.Features
             _aggregationService = aggregationService;
             _elementOperatorService = elementOperatorService;
             _setOperationService = setOperationService;
+            _groupService = groupService;
         }
         public async Task RunAllExercises()
         {
-            // Implementation of exercises would go here
             _logger.LogInformation("[LinqExerciseService.RunAllExercises] - Running all LINQ exercises...");
             int choice = 14;
+            // Allow non-interactive execution by reading an environment variable
+            // Set LINQ_CHOICE to an integer to have the service run that option once.
+            var envChoice = Environment.GetEnvironmentVariable("LINQ_CHOICE");
+            var hasForcedChoice = int.TryParse(envChoice, out var forcedChoice);
             do
             {
                 var optiontable = new Table().Title("[green]Linq Exercise Options[/]").Border(TableBorder.Rounded)
@@ -59,7 +66,15 @@ namespace LinqExercises.Features
                 optiontable.AddRow("14", "Sorting Exercises");
                 optiontable.AddRow("15", "Exit");
                 AnsiConsole.Write(optiontable);
-                choice = AnsiConsole.Ask<int>("Please select the exercise number to run?");
+                if (hasForcedChoice)
+                {
+                    choice = forcedChoice;
+                    _logger.LogInformation("Using non-interactive choice from environment: {Choice}", choice);
+                }
+                else
+                {
+                    choice = AnsiConsole.Ask<int>("Please select the exercise number to run?");
+                }
                 switch (choice)
                 {
                     case 1:
@@ -70,6 +85,9 @@ namespace LinqExercises.Features
                         break;
                     case 3:
                         await _joinService.RunJoiningExerciseAsync();
+                        break;
+                    case 4:
+                        await _groupService.RunGroupingExerciseAsync();
                         break;
                     case 5:
                         await _aggregationService.RunAggregationExerciseAsync();
@@ -90,7 +108,13 @@ namespace LinqExercises.Features
                         _logger.LogInformation("Exiting LINQ Exercises.");
                         break;
                 }
-            }while(choice<15);
+
+                // If we were given a forced choice, run it once and exit.
+                if (hasForcedChoice)
+                {
+                    break;
+                }
+            } while (choice < 15);
             
             _logger.LogInformation("[LinqExerciseService.RunAllExercises] - Completed all LINQ exercises.");
         }
