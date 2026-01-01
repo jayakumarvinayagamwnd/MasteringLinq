@@ -35,6 +35,8 @@ namespace LinqExercises.Extensions
             services.AddTransient<Features.ElementOperator.IElementOperator, Features.ElementOperator.ElementOperatorService>();
             // Register SetOperationService
             services.AddTransient<Features.SetOperation.ISetOperationService, Features.SetOperation.SetOperationService>();
+            // Register GroupService
+            services.AddTransient<Features.Grouping.IGroupService, Features.Grouping.GroupService>();
             return services;
         }
     }
