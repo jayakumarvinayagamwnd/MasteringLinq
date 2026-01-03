@@ -20,6 +20,7 @@ namespace LinqExercises.Features.SetOperation
         {
             _logger.LogInformation("[SetOperationService.RunSetOperationExerciseAsync] - Running Set Operation Exercise...");
             // Distinct
+            _logger.LogInformation("[SetOperationService.RunSetOperationExerciseAsync] - Distinct Example");    
             var customerNames = await _chinookDbContext.Customers
                 .Select(c => c.FirstName)
                 .Distinct()
@@ -29,9 +30,11 @@ namespace LinqExercises.Features.SetOperation
             customerNames.ForEach(name => distinctTable.AddRow(Markup.Escape(name!)));
             AnsiConsole.Write(distinctTable);
             AnsiConsole.MarkupLine($"[bold yellow]Results: {customerNames.Count}[/]");
-            AnsiConsole.MarkupLine("[yellow]Press any key to continue to the next Set Operation example...[/]");
+            AnsiConsole.MarkupLine("[bold italic]Press any key to continue to the next Set Operation example...[/]");
             Console.ReadKey();
+
             // Except Example
+            _logger.LogInformation("[SetOperationService.RunSetOperationExerciseAsync] - Except Example");
             var trackIdsInPlaylist1 = await _chinookDbContext.PlaylistTracks
                 .Where(pt => pt.PlaylistId == 1)
                 .Select(pt => pt.TrackId)
@@ -46,25 +49,29 @@ namespace LinqExercises.Features.SetOperation
             exceptTrackIds.ForEach(id => exceptTable.AddRow(Markup.Escape(id.ToString())));
             AnsiConsole.Write(exceptTable);
             AnsiConsole.MarkupLine($"[bold yellow]Results: {exceptTrackIds.Count}[/]");
-            AnsiConsole.MarkupLine("[yellow]Press any key to continue to the next Set Operation example...[/]");
+            AnsiConsole.MarkupLine("[bold italic]Press any key to continue to the next Set Operation example...[/]");
             Console.ReadKey();
+            
             // Intersect Example
+            _logger.LogInformation("[SetOperationService.RunSetOperationExerciseAsync] - Intersect Example");
             var intersectTrackIds = trackIdsInPlaylist1.Intersect(trackIdsInPlaylist2).ToList();
             var intersectTable = new Table().Title("Tracks in both Playlist 1 and Playlist 2");
             intersectTable.AddColumn("Track ID");
             intersectTrackIds.ForEach(id => intersectTable.AddRow(Markup.Escape(id.ToString())));
             AnsiConsole.Write(intersectTable);
             AnsiConsole.MarkupLine($"[bold yellow]Results: {intersectTrackIds.Count}[/]");
-            AnsiConsole.MarkupLine("[yellow]Press any key to continue to the next Set Operation example...[/]");
+            AnsiConsole.MarkupLine("[bold italic]Press any key to continue to the next Set Operation example...[/]");
             Console.ReadKey();
+            
             // Union Example
+            _logger.LogInformation("[SetOperationService.RunSetOperationExerciseAsync] - Union Example");
             var unionTrackIds = trackIdsInPlaylist1.Union(trackIdsInPlaylist2).ToList();
             var unionTable = new Table().Title("All Unique Tracks in Playlist 1 and Playlist 2");
             unionTable.AddColumn("Track ID");
             unionTrackIds.ForEach(id => unionTable.AddRow(Markup.Escape(id.ToString())));
             AnsiConsole.Write(unionTable);
             AnsiConsole.MarkupLine($"[bold yellow]Results: {unionTrackIds.Count}[/]");
-            AnsiConsole.MarkupLine("[yellow]Press any key to finish the Set Operation Exercise...[/]");
+            AnsiConsole.MarkupLine("[bold italic]Press Enter to continue to finish Set Operation Exercise...[/]");
             Console.ReadKey();
             _logger.LogInformation("[SetOperationService.RunSetOperationExerciseAsync] - Set Operation Exercise Completed.");
         }
