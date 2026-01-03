@@ -19,19 +19,19 @@ namespace LinqExercises.Features.Projection
             // Implementation of projection exercises would go here
             _logger.LogInformation("[ProjectionService.RunProjectionExerciseAsync] - Running projection exercises..."); 
             // Basic Projection Example
-            _logger.LogInformation("Basic Projection of Artists:");
+            _logger.LogInformation("[ProjectionService.RunProjectionExerciseAsync] - Projection to Anonymous Types of Artists:");
             var artists = await _dbContext.Artists.Select(a => new { a.Name, a.ArtistId }).ToListAsync();
             var artistTable = new Table().Title("[green]Artists[/]").Border(TableBorder.Rounded).AddColumn("ArtistId").AddColumn("Name");                                   
             artists.ForEach(artist =>
                 artistTable.AddRow(Markup.Escape(artist.ArtistId.ToString()), Markup.Escape(artist.Name ?? string.Empty))
-            );
-            
+            );            
             AnsiConsole.Write(artistTable);
             AnsiConsole.MarkupLine($"[bold yellow]Results: {artists.Count}[/]");
-            _logger.LogInformation("Press any key to continue to the next projection example..."); 
+            AnsiConsole.MarkupLine("[bold italic]Press any key to continue to the next projection example...[/]");
             Console.ReadKey();
+            
             // Annomous Types Projection Example
-            _logger.LogInformation("Projection to Anonymous Types of Albums:");
+            _logger.LogInformation("[ProjectionService.RunProjectionExerciseAsync] - Projection to Anonymous Types of Albums:");
             var albums = await _dbContext.Albums
                 .Select(al => new 
                 { 
@@ -45,10 +45,11 @@ namespace LinqExercises.Features.Projection
             );
             AnsiConsole.Write(albumTable);
             AnsiConsole.MarkupLine($"[bold yellow]Results: {albums.Count}[/]");
-            _logger.LogInformation("Press any key to continue to the next projection example..."); 
+            AnsiConsole.MarkupLine("[bold italic]Press any key to continue to the next projection example...[/]");
             Console.ReadKey();
+
             // DTO-Projection to Record Types Example
-            _logger.LogInformation("Projection to DTO Record Types of Customer Addresses:");
+            _logger.LogInformation("[ProjectionService.RunProjectionExerciseAsync] - Projection to DTO Record Types of Customer Addresses:");
             var customerAddresses = await _dbContext.Customers
                 .Select(c => new CustomerAddress(
                     c.FirstName + " " + c.LastName,
@@ -72,10 +73,10 @@ namespace LinqExercises.Features.Projection
             );
             AnsiConsole.Write(customerAddressTable);
             AnsiConsole.MarkupLine($"[bold yellow]Results: {customerAddresses.Count}[/]");
-            _logger.LogInformation("Press any key to continue to the next projection exercise..."); 
+            AnsiConsole.MarkupLine("[bold italic]Press any key to continue to the next projection exercise...[/]");
             Console.ReadKey();
             // //Nested Projection Example
-            // _logger.LogInformation("Nested Projection of Albums with Tracks:");
+            _logger.LogInformation("[ProjectionService.RunProjectionExerciseAsync] - Nested Projection of Customers with Invoices:");
             var albumWithTracks = await _dbContext.Customers
                 .Select(c => new 
                 {
@@ -98,7 +99,7 @@ namespace LinqExercises.Features.Projection
             );
             AnsiConsole.Write(albumWithTracksTable);
             AnsiConsole.MarkupLine($"[bold yellow]Results: {albumWithTracks.Count}[/]");
-            _logger.LogInformation("Press any key to finish projection exercises..."); 
+            AnsiConsole.MarkupLine("[bold italic]Press any key to finish projection exercises...[/]");
             Console.ReadKey();
             _logger.LogInformation("[ProjectionService.RunProjectionExerciseAsync] - Completed projection exercises.");
         }

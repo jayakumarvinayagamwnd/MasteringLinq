@@ -16,6 +16,8 @@ namespace LinqExercises.Features
         private readonly Features.ElementOperator.IElementOperator _elementOperatorService;
         private readonly Features.SetOperation.ISetOperationService _setOperationService;
         private readonly Features.Grouping.IGroupService _groupService;
+        private readonly Features.Partition.IPartitionService _partitionService;
+        private readonly Features.AdvancedLINQPattern.IAdvancedLINQPatternService _advancedLINQPatternService;
         public LinqExerciseService(ILogger<LinqExerciseService> logger,
             Features.Projection.IProjectionService projectionService,
             Features.Filtering.IFilterService filterService,
@@ -25,7 +27,9 @@ namespace LinqExercises.Features
             Features.Aggregation.IAggregationService aggregationService,
             Features.ElementOperator.IElementOperator elementOperatorService,
             Features.SetOperation.ISetOperationService setOperationService,
-            Features.Grouping.IGroupService groupService)
+            Features.Grouping.IGroupService groupService,
+            Features.Partition.IPartitionService partitionService,
+            Features.AdvancedLINQPattern.IAdvancedLINQPatternService advancedLINQPatternService)
         {
             _logger = logger;
             _projectionService = projectionService;
@@ -37,13 +41,13 @@ namespace LinqExercises.Features
             _elementOperatorService = elementOperatorService;
             _setOperationService = setOperationService;
             _groupService = groupService;
+            _partitionService = partitionService;
+            _advancedLINQPatternService = advancedLINQPatternService;
         }
         public async Task RunAllExercises()
         {
             _logger.LogInformation("[LinqExerciseService.RunAllExercises] - Running all LINQ exercises...");
-            int choice = 14;
-            // Allow non-interactive execution by reading an environment variable
-            // Set LINQ_CHOICE to an integer to have the service run that option once.
+            int choice = 12;
             var envChoice = Environment.GetEnvironmentVariable("LINQ_CHOICE");
             var hasForcedChoice = int.TryParse(envChoice, out var forcedChoice);
             do
@@ -56,25 +60,15 @@ namespace LinqExercises.Features
                 optiontable.AddRow("4", "Grouping Exercises");
                 optiontable.AddRow("5", "Aggregation Exercises");
                 optiontable.AddRow("6", "Set Operations Exercises");
-                optiontable.AddRow("7", "Ordering Exercises");
+                optiontable.AddRow("7", "Sorting Exercises");
                 optiontable.AddRow("8", "Quantifiers Exercises");
                 optiontable.AddRow("9", "Partitioning Exercises");
                 optiontable.AddRow("10", "Element Operators Exercises");
-                optiontable.AddRow("11", "Conversion Exercises");
-                optiontable.AddRow("12", "Generation Exercises");
-                optiontable.AddRow("13", "Miscellaneous Exercises");
-                optiontable.AddRow("14", "Sorting Exercises");
-                optiontable.AddRow("15", "Exit");
+                optiontable.AddRow("11", "Advanced LINQ Patterns");
+                optiontable.AddRow("12", "Exit");
                 AnsiConsole.Write(optiontable);
-                if (hasForcedChoice)
-                {
-                    choice = forcedChoice;
-                    _logger.LogInformation("Using non-interactive choice from environment: {Choice}", choice);
-                }
-                else
-                {
-                    choice = AnsiConsole.Ask<int>("Please select the exercise number to run?");
-                }
+                choice = AnsiConsole.Ask<int>("[yellow]Please select the exercise number to run?[/]", hasForcedChoice ? forcedChoice : 12);
+                
                 switch (choice)
                 {
                     case 1:
@@ -95,14 +89,20 @@ namespace LinqExercises.Features
                     case 6:
                         await _setOperationService.RunSetOperationExerciseAsync();
                         break;
+                    case 7:
+                        await _sortService.RunSortingExerciseAsync();
+                        break;
                     case 8:
                         await _quantifierService.RunQuantifierExerciseAsync();
+                        break;
+                    case 9:
+                        await _partitionService.RunPartitionExerciseAsync();
                         break;
                     case 10:
                         await _elementOperatorService.RunElementOperatorExerciseAsync();
                         break;
-                    case 14:
-                        await _sortService.RunSortingExerciseAsync();
+                    case 11:
+                        await _advancedLINQPatternService.RunAdvancedLINQPatternExerciseAsync();
                         break;
                     default:
                         _logger.LogInformation("Exiting LINQ Exercises.");
@@ -114,7 +114,7 @@ namespace LinqExercises.Features
                 {
                     break;
                 }
-            } while (choice < 15);
+            } while (choice < 11);
             
             _logger.LogInformation("[LinqExerciseService.RunAllExercises] - Completed all LINQ exercises.");
         }

@@ -37,6 +37,10 @@ namespace LinqExercises.Extensions
             services.AddTransient<Features.SetOperation.ISetOperationService, Features.SetOperation.SetOperationService>();
             // Register GroupService
             services.AddTransient<Features.Grouping.IGroupService, Features.Grouping.GroupService>();
+            // Register PartitionService
+            services.AddTransient<Features.Partition.IPartitionService, Features.Partition.PartitionService>();
+            // Register AdvancedLINQPatternService
+            services.AddTransient<Features.AdvancedLINQPattern.IAdvancedLINQPatternService, Features.AdvancedLINQPattern.AdvancedLINQPatternService>(); 
             return services;
         }
     }
